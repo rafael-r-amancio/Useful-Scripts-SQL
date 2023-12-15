@@ -1,0 +1,31 @@
+-- Criação da tabela de dimensão tempo
+CREATE TABLE dim_tempo (
+  data DATE PRIMARY KEY,
+  dia_semana ENUM('Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo') NOT NULL,
+  dia_mes TINYINT NOT NULL,
+  mes TINYINT NOT NULL,
+  ano SMALLINT NOT NULL,
+  final_semana ENUM('Sim', 'Não') NOT NULL
+);
+
+-- Inserção dos dados de tempo
+INSERT INTO dim_tempo (data, dia_semana, dia_mes, mes, ano, final_semana)
+SELECT 
+  data,
+  DAYNAME(data) AS dia_semana,
+  DAYOFMONTH(data) AS dia_mes,
+  MONTH(data) AS mes,
+  YEAR(data) AS ano,
+  IF(DAYOFWEEK(data) IN (1, 7), 'Sim', 'Não') AS final_semana
+FROM (
+  SELECT 
+    CURDATE() - INTERVAL (a.a + (10 * b.a) + (100 * c.a) + (1000 * d.a)) DAY AS data
+  FROM 
+    (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS a, -- 10
+    (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS b, -- 100
+    (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS c, -- 1,000
+    (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS d  -- 10,000
+) d;
+
+-- Exemplo de uso: Selecionar todos os dias de um mês específico
+SELECT * FROM dim_tempo WHERE mes = 6 AND ano = 2023;
