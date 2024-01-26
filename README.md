@@ -12,8 +12,4 @@
 
 ### 💻 Technologies
 
-![Static Badge](https://img.shields.io/badge/T_SQL-blue) 
-
-![Static Badge](https://img.shields.io/badge/PL_SQL-red)
-
-![Static Badge](https://img.shields.io/badge/SQL%20ANSI-green)
+![Static Badge](https://img.shields.io/badge/T_SQL-blue) ![Static Badge](https://img.shields.io/badge/PL_SQL-red) ![Static Badge](https://img.shields.io/badge/SQL%20ANSI-green)
